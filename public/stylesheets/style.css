@@ -7,14 +7,14 @@ a {
 }
 
 .bg-blue, .bg-grey {
-  color: whitesmoke;
+  color: #333;
   padding: 100px 50px;
 }
 
 .bg-blue {
-  background-color: steelblue;
+  /* background-color: steelblue; */
 }
 
 .bg-grey {
-  background-color: grey;
+  /* background-color: grey; */
 }
