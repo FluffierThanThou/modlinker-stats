@@ -8,7 +8,7 @@ let links = {
 }
 
 router.get('/', function( req, res, next){
-    // get top 10 mods
+    // get top 10 mods, and overall count
     Promise.all([
         req.db.topMods( 10, false ).then( mods => {
             return {
@@ -23,20 +23,29 @@ router.get('/', function( req, res, next){
 })
 
 router.get('/mods', function(req, res, next) {
-    req.db.topMods( 500 )
-        .then( table => res.render( "table", { table: table, links: links, active: "Mods", title: "Teddy :: Top mods" } ))
+    Promise.all([
+        req.db.topMods( 500 ),
+        req.db.count()
+    ])
+        .then( results => res.render( "table", { table: results[0], count: results[1], links: links, active: "Mods", title: "Teddy :: Top mods" } ))
         .catch( err => res.render( "error", {error: err} ) )
 })
 
 router.get('/authors', function(req, res, next) {
-    req.db.topAuthors( 500 )
-        .then( table => res.render( "table", { table: table, links: links, active: "Authors", title: "Teddy :: Top authors"  } ))
+    Promise.all([
+        req.db.topAuthors( 500 ),
+        req.db.count()
+    ])
+        .then( results => res.render( "table", { table: results[0], count: results[1], links: links, active: "Authors", title: "Teddy :: Top authors"  } ))
         .catch( err => res.render( "error", {error: err} ) )
 })
 
 router.get('/linkers', function(req, res, next) {
-    req.db.topRequesters( 500 )
-        .then( table => res.render( "table", { table: table, links: links, active: "Linkers", title: "Teddy :: Top linkers"  } ))
+    Promise.all([
+        req.db.topRequesters( 500 ),
+        req.db.count()
+    ])
+        .then( results => res.render( "table", { table: results[0], count: results[1], links: links, active: "Linkers", title: "Teddy :: Top linkers"  } ))
         .catch( err => res.render( "error", {error: err} ) )
 })
 
