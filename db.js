@@ -23,7 +23,11 @@ DB.prototype.connect = function( callback ){
     })
 }
 
-DB.prototype.topMods = function( limit = 10 ){
+DB.prototype.count = function(){
+    return this.db.collection( "requests_collection" ).count();
+}
+
+DB.prototype.topMods = function( limit = 10, table = true ){
     return this.db.collection( "requests_collection" ).aggregate([
         {
             $group: {
@@ -40,9 +44,28 @@ DB.prototype.topMods = function( limit = 10 ){
             $limit: limit
         }
     ]).toArray()
+      .then( docs => {
+            if (table){
+                let table = {
+                    title: "Mods",
+                    order: '[[ 2, "desc" ]]',
+                    columns: [
+                        { title: "Mod", width: "50%" },
+                        { title: "Author", width: "30%" },
+                        { title: "Count", width: "20%" }
+                    ],
+                    rows: []
+                }  
+                for ( let row of docs )
+                    table.rows.push( [ row._id, row.author, row.count ]);
+                return table;
+            } else {
+                return docs;
+            }
+      })
 }
 
-DB.prototype.topAuthors = function( limit = 10){
+DB.prototype.topAuthors = function( limit = 10, table = true ){
     return this.db.collection( "requests_collection" ).aggregate([
         {
             $group: {
@@ -58,9 +81,27 @@ DB.prototype.topAuthors = function( limit = 10){
             $limit: limit
         }
     ]).toArray()
+        .then( docs => {
+          if (table){
+              let table = {
+                  title: "Authors",
+                  order: '[[ 1, "desc" ]]',
+                  columns: [
+                      { title: "Author", width: "80%" },
+                      { title: "Count", width: "20%" }
+                  ],
+                  rows: []
+              }  
+              for ( let row of docs )
+                  table.rows.push( [ row._id, row.count ]);
+              return table;
+          } else {
+              return docs;
+          }
+    })
 }
 
-DB.prototype.topRequesters = function( limit = 10 ){
+DB.prototype.topRequesters = function( limit = 10, table = true ){
     return this.db.collection( "requests_collection" ).aggregate([
         {
             $group: {
@@ -75,6 +116,24 @@ DB.prototype.topRequesters = function( limit = 10 ){
             $limit: limit
         }
     ]).toArray()
+        .then( docs => {
+        if (table){
+            let table = {
+                title: "Linkers",
+                order: '[[ 1, "desc" ]]',
+                columns: [
+                    { title: "Redditor", width: "80%" },
+                    { title: "Count", width: "20%" }
+                ],
+                rows: []
+            }  
+            for ( let row of docs )
+                table.rows.push( [ row._id, row.count ]);
+            return table;
+        } else {
+            return docs;
+        }
+    })
 }
 
 module.exports = DB;

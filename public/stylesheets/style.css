@@ -1,4 +1,5 @@
 body {
+  color: #333;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -6,15 +7,6 @@ a {
   color: #00B7FF;
 }
 
-.bg-blue, .bg-grey {
-  color: #333;
-  padding: 100px 50px;
-}
-
-.bg-blue {
-  /* background-color: steelblue; */
-}
-
-.bg-grey {
-  /* background-color: grey; */
+.content {
+  margin-top: 50px;
 }
